@@ -4,6 +4,8 @@ import * as gcp from "@pulumi/gcp";
 const config = new pulumi.Config();
 // const gcpConfig = new pulumi.Config("gcp");
 const env = pulumi.getStack();
+const currentProject = gcp.organizations.getProject({});
+const projectNumber = currentProject.then(project => project.number!);
 
 // Networking
 const vpc = new gcp.compute.Network("afl-tracker-vpc", {
@@ -43,14 +45,25 @@ const repositoryNames = config.requireObject<string[]>("repositories");
 const roles = config.requireObject<string[]>("wifRoles");
 const projectId = gcp.config.project!;
 
+// Service Account for deploying applications
+const appDeployerSA = new gcp.serviceaccount.Account("app-deployer-sa", {
+    accountId: "app-deployer-sa",
+    displayName: "SA for deploying AFL Tracker Applications (Frontend/Backend Repos)",
+});
+
 for (const repoName of repositoryNames) {
-    for (const role of roles) {
-        const binding = new gcp.projects.IAMMember(`${repoName}-${role}-binding`, {
-            project: projectId,
-            role: role,
-            member: pulumi.interpolate`principalSet://iam.googleapis.com/projects/${projectId}/locations/global/workloadIdentityPools/${pool}/attribute.repository/${repositoryOrg}/${repoName}`,
-        });
-    }
+    new gcp.serviceaccount.IAMMember(`app-deployer-wif-binding-${repoName}`, {
+        serviceAccountId: appDeployerSA.name,
+        role: "roles/iam.workloadIdentityUser",
+        member: pulumi.interpolate`principalSet://iam.googleapis.com/projects/${projectNumber}/locations/global/workloadIdentityPools/${pool}/attribute.repository/${repositoryOrg}/${repoName}`,
+    });
+}
+for (const role of roles) {
+    new gcp.projects.IAMMember(`app-deployer-role-binding-${role.split("/")[1].replace(".", "-")}`, {
+        project: projectId,
+        role: role,
+        member: pulumi.interpolate`serviceAccount:${appDeployerSA.email}`,
+    });
 }
 
 export const vpcName = vpc.name;
