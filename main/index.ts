@@ -70,3 +70,4 @@ export const vpcName = vpc.name;
 export const publicSubnetName = publicSubnet.name;
 export const privateSubnetName = privateSubnet.name;
 export const artifactRegistryName = artifactRegistry.name;
+export const appDeployerSAEmail = appDeployerSA.email;
