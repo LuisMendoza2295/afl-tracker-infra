@@ -1,0 +1,4 @@
+config:
+  gcp:project: afl-tracker-482307
+  bootstrap-infra:repositoryOrg: LuisMendoza2295
+  bootstrap-infra:repositoryName: afl-tracker-infra
