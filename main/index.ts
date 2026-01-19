@@ -39,7 +39,7 @@ const artifactRegistry = new gcp.artifactregistry.Repository("afl-tracker-repo",
 // WIF setup for dev projects (frontend/backend) with Github Actions
 const pool = config.require("poolName");
 const repositoryOrg = config.require("repositoryOrg");
-const repositoryNames = config.requireObject<string[]>("repositoryNames");
+const repositoryNames = config.requireObject<string[]>("repositories");
 const roles = config.requireObject<string[]>("wifRoles");
 const projectId = gcp.config.project!;
 
