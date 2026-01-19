@@ -52,6 +52,12 @@ const iamAdminBinding = new gcp.projects.IAMMember("afl-tracker-infra-iamadmin-b
     role: "roles/resourcemanager.projectIamAdmin",
     member: pulumi.interpolate`serviceAccount:${infraManagerSA.email}`,
 });
+const serviceAccountAdminBinding = new gcp.projects.IAMMember("afl-tracker-infra-saadmin-binding", {
+    project: gcp.config.project!,
+    role: "roles/iam.serviceAccountAdmin",
+    member: pulumi.interpolate`serviceAccount:${infraManagerSA.email}`,
+});
+
 // Grant the WIF pool the iam.workloadIdentityUser role on the infraManagerSA (Allow impersonation)
 const infraManagerSABinding = new gcp.serviceaccount.IAMMember("infra-sa-to-impersonate", {
     serviceAccountId: infraManagerSA.name,
