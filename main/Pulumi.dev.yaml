@@ -1,0 +1,13 @@
+config:
+  gcp:region: us-central1
+  gcp:project: afl-tracker-482307
+  afl-tracker-infra:poolName: afl-tracker-infra-pool
+  afl-tracker-infra:repositoryOrg: LuisMendoza2295
+  afl-tracker-infra:repositories: 
+    - afl-tracker-web-ui
+    - afl-tracker-backend
+  afl-tracker-infra:wifRoles:
+    - roles/run.admin
+    - roles/artifactregistry.writer
+    - roles/storage.admin
+    - roles/iam.serviceAccountUser
