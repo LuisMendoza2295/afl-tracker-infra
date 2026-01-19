@@ -25,10 +25,7 @@ jobs:
         uses: google-github-actions/auth@v2
         with:
           workload_identity_provider: ${{ vars.WIF_PROVIDER_NAME }}
-          # IMPORTANT: For Direct Resource Access, leave 'service_account' EMPTY.
-          # This tells the action to use the Federated Identity directly.
-          create_credentials_file: true
-          export_environment_variables: true
+          service_account: ${{ vars.WIF_SERVICE_ACCOUNT }}
       
       - name: Setup Node.js
         uses: actions/setup-node@v4

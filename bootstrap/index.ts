@@ -32,7 +32,6 @@ const oidcProvider = new gcp.iam.WorkloadIdentityPoolProvider("infra-provider", 
 
 // Grant the afl-tracker-infra repo direct access to act as the following roles
 // roles: roles/editor, resourcemanager.projectIamAdmin
-// Use Direct Resource Access instead of a Service Account for simplicity
 const githubRepo = config.require("repositoryName");
 const githubOrg = config.require("repositoryOrg");
 const editorBinding = new gcp.projects.IAMMember("afl-tracker-infra-editor-binding", {
@@ -45,7 +44,18 @@ const iamAdminBinding = new gcp.projects.IAMMember("afl-tracker-infra-iamadmin-b
     role: "roles/resourcemanager.projectIamAdmin",
     member: pulumi.interpolate`principalSet://iam.googleapis.com/${workloadIdentityPool.name}/attribute.repository/${githubOrg}/${githubRepo}`,
 });
-
+// Use Service Account Impersonation with the WIF pool and provider (Cannot use Direct Resource Access as we don't have an Organization)
+const infraManagerSA = new gcp.serviceaccount.Account("infra-manager-sa", {
+    accountId: "infra-manager-sa",
+    displayName: "SA for managing AFL Tracker Infrastructure (Infra Repo)",
+});
+// Grant the WIF pool the iam.workloadIdentityUser role on the infraManagerSA (Allow impersonation)
+const infraManagerSABinding = new gcp.serviceaccount.IAMMember("infra-sa-to-impersonate", {
+    serviceAccountId: infraManagerSA.name,
+    role: "roles/iam.workloadIdentityUser",
+    member: pulumi.interpolate`principalSet://iam.googleapis.com/${workloadIdentityPool.name}/attribute.repository/${githubOrg}/${githubRepo}`,
+});
 
 export const workloadIdentityPoolName = workloadIdentityPool.name;
 export const oidcProviderName = oidcProvider.name;
+export const infraManagerSAEmail = infraManagerSA.email;
