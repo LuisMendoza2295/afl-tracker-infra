@@ -6,6 +6,9 @@ const config = new pulumi.Config();
 const githubRepo = config.require("repositoryName");
 const githubOrg = config.require("repositoryOrg");
 
+const currentProject = gcp.organizations.getProject({});
+const projectNumber = currentProject.then(project => project.number!);
+
 // Create the Workload Identity Pool (WIF)
 const poolId = "afl-tracker-infra-pool";
 const workloadIdentityPool = new gcp.iam.WorkloadIdentityPool("infra-pool", {
@@ -41,7 +44,7 @@ const infraManagerSA = new gcp.serviceaccount.Account("infra-manager-sa", {
 
 // Grant the afl-tracker-infra repo direct access to act as the following roles
 // roles: roles/editor, resourcemanager.projectIamAdmin
-const roles = ["roles/editor", "roles/resourcemanager.projectIamAdmin"];
+const roles = ["roles/editor", "roles/resourcemanager.projectIamAdmin", "roles/iam.serviceAccountAdmin"];
 const editorBinding = new gcp.projects.IAMMember("afl-tracker-infra-editor-binding", {
     project: gcp.config.project!,
     role: "roles/editor",
@@ -62,7 +65,7 @@ const serviceAccountAdminBinding = new gcp.projects.IAMMember("afl-tracker-infra
 const infraManagerSABinding = new gcp.serviceaccount.IAMMember("infra-sa-to-impersonate", {
     serviceAccountId: infraManagerSA.name,
     role: "roles/iam.workloadIdentityUser",
-    member: pulumi.interpolate`principalSet://iam.googleapis.com/${workloadIdentityPool.name}/attribute.repository/${githubOrg}/${githubRepo}`,
+    member: pulumi.interpolate`principalSet://iam.googleapis.com/projects/${projectNumber}/locations/global/workloadIdentityPools/${poolId}/attribute.repository/${githubOrg}/${githubRepo}`,
 });
 
 export const workloadIdentityPoolName = workloadIdentityPool.name;

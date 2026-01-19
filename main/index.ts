@@ -2,7 +2,6 @@ import * as pulumi from "@pulumi/pulumi";
 import * as gcp from "@pulumi/gcp";
 
 const config = new pulumi.Config();
-// const gcpConfig = new pulumi.Config("gcp");
 const env = pulumi.getStack();
 const currentProject = gcp.organizations.getProject({});
 const projectNumber = currentProject.then(project => project.number!);
