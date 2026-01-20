@@ -65,8 +65,15 @@ for (const role of roles) {
     });
 }
 
+// Service Account for the runtime of applications
+const backendRuntimeSA = new gcp.serviceaccount.Account("afl-backend-runtime-sa", {
+    accountId: "afl-backend-runtime",
+    displayName: "Runtime identity for AFL Quarkus Backend Application",
+});
+
 export const vpcName = vpc.name;
 export const publicSubnetName = publicSubnet.name;
 export const privateSubnetName = privateSubnet.name;
 export const artifactRegistryName = artifactRegistry.name;
 export const appDeployerSAEmail = appDeployerSA.email;
+export const backendRuntimeSAEmail = backendRuntimeSA.email;
