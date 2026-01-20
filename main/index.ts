@@ -29,25 +29,6 @@ const privateSubnet = new gcp.compute.Subnetwork("private-subnet", {
     privateIpGoogleAccess: true,
 });
 
-const connectorSubnet = new gcp.compute.Subnetwork("vpc-connector-subnet", {
-    name: "connector-subnet",
-    ipCidrRange: "10.0.3.0/28",
-    network: vpc.id,
-    region: gcp.config.region!,
-    description: "AFL VPC Connector subnet for serverless VPC access",
-});
-
-const vpcConnector = new gcp.vpcaccess.Connector("afl-tracker-connector", {
-    name: "afl-tracker-backend-vpc-connector",
-    region: gcp.config.region!,
-    subnet: {
-        name: connectorSubnet.name,
-    },
-    machineType: "e2-micro",
-    minInstances: 1,
-    maxInstances: 2,
-});
-
 // Artifact Registry
 const artifactRegistry = new gcp.artifactregistry.Repository("afl-tracker-repo", {
     repositoryId: "afl-tracker-repo",
@@ -101,5 +82,4 @@ export const privateSubnetName = privateSubnet.name;
 export const artifactRegistryName = artifactRegistry.name;
 export const appDeployerSAEmail = appDeployerSA.email;
 export const backendRuntimeSAEmail = backendRuntimeSA.email;
-export const vpcConnectorName = vpcConnector.name;
-export const vpcConnectorId = vpcConnector.id;
+export const frontendRuntimeSAEmail = frontendRuntimeSA.email;
