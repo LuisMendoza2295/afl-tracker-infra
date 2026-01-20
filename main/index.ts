@@ -29,6 +29,25 @@ const privateSubnet = new gcp.compute.Subnetwork("private-subnet", {
     privateIpGoogleAccess: true,
 });
 
+const connectorSubnet = new gcp.compute.Subnetwork("vpc-connector-subnet", {
+    name: "connector-subnet",
+    ipCidrRange: "10.0.3.0/2",
+    network: vpc.id,
+    region: gcp.config.region!,
+    description: "AFL VPC Connector subnet for serverless VPC access",
+});
+
+const vpcConnector = new gcp.vpcaccess.Connector("afl-tracker-connector", {
+    name: "afl-tracker-backend-vpc-connector",
+    region: gcp.config.region!,
+    subnet: {
+        name: connectorSubnet.name,
+    },
+    machineType: "e2-micro",
+    minInstances: 1,
+    maxInstances: 2,
+});
+
 // Artifact Registry
 const artifactRegistry = new gcp.artifactregistry.Repository("afl-tracker-repo", {
     repositoryId: "afl-tracker-repo",
@@ -71,9 +90,16 @@ const backendRuntimeSA = new gcp.serviceaccount.Account("afl-backend-runtime-sa"
     displayName: "Runtime identity for AFL Quarkus Backend Application",
 });
 
+const frontendRuntimeSA = new gcp.serviceaccount.Account("afl-frontend-runtime-sa", {
+    accountId: "afl-frontend-runtime",
+    displayName: "Runtime identity for AFL Vue Frontend Application",
+});
+
 export const vpcName = vpc.name;
 export const publicSubnetName = publicSubnet.name;
 export const privateSubnetName = privateSubnet.name;
 export const artifactRegistryName = artifactRegistry.name;
 export const appDeployerSAEmail = appDeployerSA.email;
 export const backendRuntimeSAEmail = backendRuntimeSA.email;
+export const vpcConnectorName = vpcConnector.name;
+export const vpcConnectorId = vpcConnector.id;
