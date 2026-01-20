@@ -33,7 +33,7 @@ const oidcProvider = new gcp.iam.WorkloadIdentityPoolProvider("infra-provider", 
         "attribute.actor": "assertion.actor",
         "attribute.repository": "assertion.repository",
     },
-    attributeCondition: `attribute.repository == '${githubOrg}/${githubRepo}'`,
+    attributeCondition: `attribute.repository.startsWith('${githubOrg}/')`,
 });
 
 // Use Service Account Impersonation with the WIF pool and provider (Cannot use Direct Resource Access as we don't have an Organization)
