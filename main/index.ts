@@ -31,7 +31,7 @@ const privateSubnet = new gcp.compute.Subnetwork("private-subnet", {
 
 const connectorSubnet = new gcp.compute.Subnetwork("vpc-connector-subnet", {
     name: "connector-subnet",
-    ipCidrRange: "10.0.3.0/2",
+    ipCidrRange: "10.0.3.0/28",
     network: vpc.id,
     region: gcp.config.region!,
     description: "AFL VPC Connector subnet for serverless VPC access",
