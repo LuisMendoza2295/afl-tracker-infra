@@ -1,13 +1,7 @@
-name: Deploy GCP Main Infrastructure
+name: Deploy GCP Main (Manual)
 
 on:
-  push:
-    branches:
-      - main
-    paths:
-      - 'main/**'
-      - '.github/workflows/deploy-gcp-main.yml'
-  workflow_dispatch:
+  workflow_dispatch:  # Manual trigger only
 
 permissions:
   id-token: write
@@ -47,6 +41,6 @@ jobs:
         with:
           work-dir: ./main
           command: up
-          stack-name: dev-gcp
+          stack-name: dev
         env:
           PULUMI_ACCESS_TOKEN: ${{ secrets.PULUMI_ACCESS_TOKEN }}

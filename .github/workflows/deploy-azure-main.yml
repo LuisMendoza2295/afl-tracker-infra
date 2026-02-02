@@ -1,16 +1,7 @@
-name: Deploy Azure Main Infrastructure
+name: Deploy Azure Main (Manual)
 
 on:
-  push:
-    branches:
-      - main
-    paths:
-      - 'main/azure/**'
-      - 'main/index.ts'
-      - 'main/package.json'
-      - 'main/tsconfig.json'
-      - '.github/workflows/deploy-azure-main.yml'
-  workflow_dispatch:  # Allow manual triggering
+  workflow_dispatch:  # Manual trigger only
 
 permissions:
   id-token: write
@@ -51,6 +42,6 @@ jobs:
         with:
           work-dir: ./main
           command: up
-          stack-name: dev-azure
+          stack-name: dev
         env:
           PULUMI_ACCESS_TOKEN: ${{ secrets.PULUMI_ACCESS_TOKEN }}
