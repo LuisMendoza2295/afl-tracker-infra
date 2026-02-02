@@ -1,2 +1,6 @@
-*bin/
-*node_modules/
+**/bin/
+**/node_modules/
+**/.pulumi/
+**/obj/
+*.log
+.DS_Store

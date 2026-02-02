@@ -3,6 +3,7 @@ description: Infra setup for afl-tracker projects
 runtime:
   name: nodejs
   options:
+    nodeargs: --max-old-space-size=4096
     packagemanager: npm
 config:
   pulumi:tags:

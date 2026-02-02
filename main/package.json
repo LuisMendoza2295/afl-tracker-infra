@@ -7,6 +7,8 @@
     },
     "dependencies": {
         "@pulumi/pulumi": "^3.113.0",
-        "@pulumi/gcp": "^9.9.0"
+        "@pulumi/gcp": "^9.9.0",
+        "@pulumi/azure-native": "^2.0.0",
+        "@pulumi/azuread": "^5.0.0"
     }
 }

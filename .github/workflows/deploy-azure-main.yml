@@ -1,0 +1,56 @@
+name: Deploy Azure Main Infrastructure
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - 'main/azure/**'
+      - 'main/index.ts'
+      - 'main/package.json'
+      - 'main/tsconfig.json'
+      - '.github/workflows/deploy-azure-main.yml'
+  workflow_dispatch:  # Allow manual triggering
+
+permissions:
+  id-token: write
+  contents: read
+
+jobs:
+  deploy:
+    name: Deploy Azure Infrastructure
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '24.12'
+          cache: 'npm'
+          cache-dependency-path: main/package-lock.json
+      
+      - name: Install dependencies
+        working-directory: main
+        run: npm ci
+      
+      - name: Azure Login
+        uses: azure/login@v2
+        with:
+          client-id: ${{ vars.AZURE_CLIENT_ID }}
+          tenant-id: ${{ vars.AZURE_TENANT_ID }}
+          subscription-id: ${{ vars.AZURE_SUBSCRIPTION_ID }}
+      
+      - name: Setup Pulumi
+        uses: pulumi/actions@v5
+      
+      - name: Deploy Azure Infrastructure
+        uses: pulumi/actions@v5
+        with:
+          work-dir: ./main
+          command: up
+          stack-name: dev-azure
+        env:
+          PULUMI_ACCESS_TOKEN: ${{ secrets.PULUMI_ACCESS_TOKEN }}

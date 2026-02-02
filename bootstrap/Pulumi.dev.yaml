@@ -1,4 +1,5 @@
 config:
   gcp:project: afl-tracker-482307
+  azure-native:subscriptionId: 4ac47ed8-35f5-4392-b406-1bf72a5c70e9
   bootstrap-infra:repositoryOrg: LuisMendoza2295
   bootstrap-infra:repositoryName: afl-tracker-infra

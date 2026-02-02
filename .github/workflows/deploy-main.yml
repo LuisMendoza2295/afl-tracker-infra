@@ -1,0 +1,60 @@
+name: Deploy Main Infrastructure
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - 'main/**'
+      - '.github/workflows/deploy-main.yml'
+  workflow_dispatch:
+
+permissions:
+  id-token: write
+  contents: read
+
+jobs:
+  deploy:
+    name: Deploy Multi-Cloud Infrastructure
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      
+      # Authenticate to both clouds
+      - name: Authenticate to Google Cloud
+        uses: google-github-actions/auth@v2
+        with:
+          workload_identity_provider: ${{ vars.GCP_WIF_PROVIDER_NAME }}
+          service_account: ${{ vars.GCP_WIF_SERVICE_ACCOUNT }}
+      
+      - name: Azure Login
+        uses: azure/login@v2
+        with:
+          client-id: ${{ vars.AZURE_CLIENT_ID }}
+          tenant-id: ${{ vars.AZURE_TENANT_ID }}
+          subscription-id: ${{ vars.AZURE_SUBSCRIPTION_ID }}
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '24.12'
+          cache: 'npm'
+          cache-dependency-path: ./main/package-lock.json
+      
+      - name: Install dependencies
+        working-directory: main
+        run: npm ci
+      
+      - name: Setup Pulumi
+        uses: pulumi/actions@v5
+      
+      - name: Deploy Infrastructure (GCP + Azure)
+        uses: pulumi/actions@v5
+        with:
+          work-dir: ./main
+          command: up
+          stack-name: dev
+        env:
+          PULUMI_ACCESS_TOKEN: ${{ secrets.PULUMI_ACCESS_TOKEN }}

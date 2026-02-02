@@ -1,6 +1,7 @@
 config:
   gcp:region: us-central1
   gcp:project: afl-tracker-482307
+  azure-native:subscriptionId: 4ac47ed8-35f5-4392-b406-1bf72a5c70e9
   afl-tracker-infra:poolName: afl-tracker-infra-pool
   afl-tracker-infra:repositoryOrg: LuisMendoza2295
   afl-tracker-infra:repositories: 
