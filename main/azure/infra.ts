@@ -5,6 +5,13 @@ import { AZURE_BUILT_IN_ROLES } from "./constants";
 
 const config = new pulumi.Config();
 const azureConfig = new pulumi.Config("azure-native");
+
+// Register Cognitive Services Provider (required for Custom Vision)
+// This infrastructure deployment is performed by an entity with Subscription-level permissions
+const cognitiveServicesProvider = new azure.resources.Provider("register-custom-vision", {
+  namespace: "Microsoft.CognitiveServices",
+});
+
 const env = pulumi.getStack();
 const location = azureConfig.get("location") || "eastus";
 const subscriptionId = azureConfig.require("subscriptionId");
