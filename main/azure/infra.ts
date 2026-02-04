@@ -42,7 +42,7 @@ for (const repo of repositories) {
     description: `Federated credential for ${repo} repository`,
     audiences: ["api://AzureADTokenExchange"],
     issuer: "https://token.actions.githubusercontent.com",
-    subject: pulumi.interpolate`repo:${repositoryOrg}/${repo}`,
+    subject: pulumi.interpolate`repo:${repositoryOrg}/${repo}:environment:${env}`,
   });
 }
 
