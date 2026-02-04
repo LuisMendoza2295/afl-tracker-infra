@@ -15,6 +15,7 @@
     "files": [
         "index.ts",
         "gcp/infra.ts",
-        "azure/infra.ts"
+        "azure/infra.ts",
+        "azure/constants.ts"
     ]
 }

@@ -26,3 +26,23 @@ export const AZURE_BUILT_IN_ROLES = {
    */
   READER: "acdd72a7-3385-48ef-bd42-f606fba81ae7",
 } as const;
+
+/**
+ * Azure AD Directory Role Template IDs
+ * 
+ * These UUIDs are globally consistent across all Azure AD tenants.
+ * Directory Roles grant administrative privileges within Azure AD.
+ * Reference: https://learn.microsoft.com/en-us/entra/identity/role-based-access-control/permissions-reference
+ */
+export const AZURE_DIRECTORY_ROLES = {
+  /**
+   * Cloud Application Administrator - Can create and manage all aspects of app registrations and enterprise apps
+   * except App Proxy. Cannot manage applications with high-privilege permissions.
+   */
+  CLOUD_APPLICATION_ADMINISTRATOR: "158c047a-c907-4556-b7ef-446551a6b5f7",
+
+  /**
+   * Application Administrator - Can create and manage all aspects of app registrations and enterprise apps.
+   */
+  APPLICATION_ADMINISTRATOR: "9b895d92-2cd3-44c7-9d02-a6ac2d5ea5c3",
+} as const;

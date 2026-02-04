@@ -1,7 +1,7 @@
 import * as pulumi from "@pulumi/pulumi";
 import * as azuread from "@pulumi/azuread";
 import * as azure from "@pulumi/azure-native";
-import { AZURE_BUILT_IN_ROLES } from "./constants";
+import { AZURE_BUILT_IN_ROLES, AZURE_DIRECTORY_ROLES } from "./constants";
 
 const config = new pulumi.Config();
 const azureConfig = new pulumi.Config("azure-native");
@@ -52,6 +52,13 @@ const userAccessAdminRoleAssignment = new azure.authorization.RoleAssignment("in
   principalType: azure.authorization.PrincipalType.ServicePrincipal,
   roleDefinitionId: userAccessAdminRoleId,
   scope: pulumi.interpolate`/subscriptions/${subscriptionId}`,
+});
+
+// 5. Assign Azure AD Directory Role for managing applications
+// Cloud Application Administrator allows the SP to create and manage app registrations
+const cloudAppAdminRole = new azuread.DirectoryRoleAssignment("infra-cloud-app-admin", {
+  roleId: AZURE_DIRECTORY_ROLES.CLOUD_APPLICATION_ADMINISTRATOR,
+  principalObjectId: infraSP.objectId,
 });
 
 // Get the current tenant ID from Azure
