@@ -74,6 +74,26 @@ new azure.authorization.RoleAssignment("app-deployer-contributor", {
   scope: resourceGroup.id,
 });
 
+// Create a Custom Role for managing Role Assignments (Least Privilege)
+const roleAssignmentManagerRole = new azure.authorization.RoleDefinition("app-deployer-iam-role", {
+  roleName: "afl-iam-manager",
+  description: "Allows managing Role Assignments within the Resource Group",
+  scope: resourceGroup.id,
+  permissions: [{
+    actions: ["Microsoft.Authorization/roleAssignments/write"],
+    notActions: [],
+  }],
+  assignableScopes: [resourceGroup.id],
+});
+
+// Grant the Custom Role to the app deployer
+new azure.authorization.RoleAssignment("app-deployer-iam-manager", {
+  principalId: appDeployerSP.objectId,
+  principalType: azure.authorization.PrincipalType.ServicePrincipal,
+  roleDefinitionId: roleAssignmentManagerRole.id,
+  scope: resourceGroup.id,
+});
+
 // 3. Create Managed Identity for backend runtime (equivalent to backend-runtime-sa)
 const backendIdentity = new azure.managedidentity.UserAssignedIdentity("backend-runtime-identity", {
   resourceGroupName: resourceGroup.name,
