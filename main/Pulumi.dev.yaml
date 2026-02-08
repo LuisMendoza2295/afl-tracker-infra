@@ -13,3 +13,4 @@ config:
     - roles/storage.admin
     - roles/iam.serviceAccountUser
     - roles/compute.viewer
+    - roles/datastore.owner
