@@ -71,6 +71,17 @@ const backendRuntimeSA = new gcp.serviceaccount.Account("afl-backend-runtime-sa"
     displayName: "Runtime identity for AFL Quarkus Backend Application",
 });
 
+const firestoreService = new gcp.projects.Service("firestore-service", {
+    service: "firestore.googleapis.com",
+    disableOnDestroy: false,
+});
+
+new gcp.projects.IAMMember("backend-firestore-access", {
+    project: projectId,
+    role: "roles/datastore.user",
+    member: pulumi.interpolate`serviceAccount:${backendRuntimeSA.email}`,
+});
+
 const frontendRuntimeSA = new gcp.serviceaccount.Account("afl-frontend-runtime-sa", {
     accountId: "afl-frontend-runtime",
     displayName: "Runtime identity for AFL Vue Frontend Application",
