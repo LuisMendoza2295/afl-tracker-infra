@@ -15,3 +15,4 @@ config:
     - roles/iam.serviceAccountUser
     - roles/compute.viewer
     - roles/datastore.owner
+    - roles/firebasehosting.admin
