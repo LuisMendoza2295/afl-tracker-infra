@@ -94,3 +94,25 @@ export const gcpArtifactRegistryName = artifactRegistry.name;
 export const gcpAppDeployerSAEmail = appDeployerSA.email;
 export const gcpBackendRuntimeSAEmail = backendRuntimeSA.email;
 export const gcpFrontendRuntimeSAEmail = frontendRuntimeSA.email;
+
+// Firebase Services
+const firebaseService = new gcp.projects.Service("firebase-service", {
+    service: "firebase.googleapis.com",
+    disableOnDestroy: false,
+});
+
+// Initialize Firebase Project
+// Note: This resource links the GCP project to Firebase.
+const firebaseProject = new gcp.firebase.Project("firebase-project", {
+    project: projectId,
+}, { dependsOn: [firebaseService] });
+
+const siteDomain = config.require("siteDomain")
+// Firebase Hosting Site
+// This creates the default hosting site (siteDomain.web.app)
+const hostingSite = new gcp.firebase.HostingSite("afl-tracker-hosting-site-dev", {
+    project: projectId,
+    siteId: siteDomain,
+}, { dependsOn: [firebaseProject] });
+
+export const gcpFirebaseHostingUrl = hostingSite.defaultUrl;
