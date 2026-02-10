@@ -6,10 +6,10 @@
     "afl-tracker-482307": {
       "hosting": {
         "app-dev": [
-          "afl-sticker-tracker-dev"
+          "afl-tracker-dev"
         ],
         "api-dev": [
-          "afl-sticker-tracker-api-dev"
+          "afl-tracker-api-dev"
         ]
       }
     }
