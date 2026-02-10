@@ -4,7 +4,8 @@ config:
   azure-native:subscriptionId: 4ac47ed8-35f5-4392-b406-1bf72a5c70e9
   afl-tracker-infra:poolName: afl-tracker-infra-pool
   afl-tracker-infra:repositoryOrg: LuisMendoza2295
-  afl-tracker-infra:siteDomain: afl-sticker-tracker-dev
+  afl-tracker-infra:frontendSiteDomain: afl-sticker-tracker-dev
+  afl-tracker-infra:backendSiteDomain: afl-sticker-tracker-api-dev
   afl-tracker-infra:repositories: 
     - afl-tracker-web-ui
     - afl-tracker-backend

@@ -102,17 +102,25 @@ const firebaseService = new gcp.projects.Service("firebase-service", {
 });
 
 // Initialize Firebase Project
-// Note: This resource links the GCP project to Firebase.
 const firebaseProject = new gcp.firebase.Project("firebase-project", {
     project: projectId,
 }, { dependsOn: [firebaseService] });
 
-const siteDomain = config.require("siteDomain")
+const frontendSiteDomain = config.require("frontendSiteDomain")
 // Firebase Hosting Site
 // This creates the default hosting site (siteDomain.web.app)
-const hostingSite = new gcp.firebase.HostingSite("afl-tracker-hosting-site-dev", {
+const frontendHostingSite = new gcp.firebase.HostingSite(`afl-tracker-frontend-hosting-site-${env}`, {
     project: projectId,
-    siteId: siteDomain,
+    siteId: frontendSiteDomain,
 }, { dependsOn: [firebaseProject] });
 
-export const gcpFirebaseHostingUrl = hostingSite.defaultUrl;
+const backendSiteDomain = config.require("backendSiteDomain")
+// Firebase Hosting Site
+// This creates the default hosting site (siteDomain.web.app)
+const backendHostingSite = new gcp.firebase.HostingSite(`afl-tracker-backend-hosting-site-${env}`, {
+    project: projectId,
+    siteId: backendSiteDomain,
+}, { dependsOn: [firebaseProject] });
+
+export const gcpFirebaseFrontendHostingUrl = frontendHostingSite.defaultUrl;
+export const gcpFirebaseBackendHostingUrl = backendHostingSite.defaultUrl;
