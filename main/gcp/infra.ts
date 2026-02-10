@@ -100,8 +100,6 @@ const firebaseService = new gcp.projects.Service("firebase-service", {
     service: "firebase.googleapis.com",
     disableOnDestroy: false,
 });
-
-// Initialize Firebase Project
 const firebaseProject = new gcp.firebase.Project("firebase-project", {
     project: projectId,
 }, { dependsOn: [firebaseService] });
