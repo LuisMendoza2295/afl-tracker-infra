@@ -19,9 +19,8 @@ jobs:
         id: gcloud-auth
         uses: google-github-actions/auth@v2
         with:
-          token_format: 'access_token'
-          workload_identity_provider: ${{ vars.WIF_PROVIDER }}
-          service_account: ${{ vars.APP_DEPLOYER_SERVICE_ACCOUNT }}
+          workload_identity_provider: ${{ vars.GCP_WIF_PROVIDER_NAME }}
+          service_account: ${{ vars.GCP_WIF_SERVICE_ACCOUNT }}
 
       - name: Install firebase-tools
         run: npm install -g firebase-tools
