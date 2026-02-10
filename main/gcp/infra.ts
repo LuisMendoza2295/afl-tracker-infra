@@ -107,17 +107,14 @@ const firebaseProject = new gcp.firebase.Project("firebase-project", {
 }, { dependsOn: [firebaseService] });
 
 const frontendSiteDomain = config.require("frontendSiteDomain")
+const backendSiteDomain = config.require("backendSiteDomain")
 // Firebase Hosting Site
-// This creates the default hosting site (siteDomain.web.app)
-const frontendHostingSite = new gcp.firebase.HostingSite(`afl-tracker-frontend-hosting-site-${env}`, {
+const frontendHostingSite = new gcp.firebase.HostingSite("afl-tracker-frontend-hosting-site", {
     project: projectId,
     siteId: frontendSiteDomain,
 }, { dependsOn: [firebaseProject] });
 
-const backendSiteDomain = config.require("backendSiteDomain")
-// Firebase Hosting Site
-// This creates the default hosting site (siteDomain.web.app)
-const backendHostingSite = new gcp.firebase.HostingSite(`afl-tracker-backend-hosting-site-${env}`, {
+const backendHostingSite = new gcp.firebase.HostingSite("afl-tracker-backend-hosting-site", {
     project: projectId,
     siteId: backendSiteDomain,
 }, { dependsOn: [firebaseProject] });

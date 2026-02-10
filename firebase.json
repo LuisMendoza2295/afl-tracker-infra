@@ -1,0 +1,28 @@
+{
+  "hosting": [
+    {
+      "target": "app-dev",
+      "rewrites": [
+        {
+          "source": "**",
+          "run": {
+            "serviceId": "afl-tracker-web-service",
+            "region": "us-central1"
+          }
+        }
+      ]
+    },
+    {
+      "target": "api-dev",
+      "rewrites": [
+        {
+          "source": "**",
+          "run": {
+            "serviceId": "afl-tracker-backend-service",
+            "region": "us-central1"
+          }
+        }
+      ]
+    }
+  ]
+}

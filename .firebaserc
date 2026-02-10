@@ -1,0 +1,17 @@
+{
+  "projects": {
+    "default": "afl-tracker-482307"
+  },
+  "targets": {
+    "afl-tracker-482307": {
+      "hosting": {
+        "app-dev": [
+          "afl-sticker-tracker-dev"
+        ],
+        "api-dev": [
+          "afl-sticker-tracker-api-dev"
+        ]
+      }
+    }
+  }
+}
